@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.http import JsonResponse
 from weather_api import current_weather
 

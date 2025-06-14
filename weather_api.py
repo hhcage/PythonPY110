@@ -28,7 +28,7 @@ def current_weather(lat, lon):
     """
     Описание функции, входных и выходных переменных
     """
-    token = '566f5ffa2c4b4a24b71111515250406'  # Вставить ваш токен из api.weatherapi.com
+    token = 'b1e619da98974045a4d192102231911' # 'Ваш токен'  # Вставить ваш токен из api.weatherapi.com
     url = f"https://api.weatherapi.com/v1/current.json?key={token}&q={lat},{lon}"
     response = requests.get(url)
     data = response.json()
@@ -37,12 +37,12 @@ def current_weather(lat, lon):
     result = {
         'city': data['location']['name'],  # Город
         'time': data['current']['last_updated'],  # Время обновления данных
-        'temp': data['current']['temp_c'],
-        'feels_like_temp': data['current']['feelslike_c'],
-        'pressure': data['current']['pressure_mb'],
-        'humidity': data['current']['humidity'],
-        'wind_speed': data['current']['wind_kph'],
-        'wind_gust': data['current']['gust_kph'],
+        'temp': data['current']['temp_c'],  # TODO Реализовать вычисление температуры из данных полученных от API
+        'feels_like_temp': data['current']['feelslike_c'],  # TODO Реализовать вычисление ощущаемой температуры из данных полученных от API
+        'pressure': round(data['current']['pressure_mb'] * 0.75, 1),  # TODO Реализовать вычисление давления из данных полученных от API
+        'humidity': data['current']['humidity'],  # TODO Реализовать вычисление влажности из данных полученных от API
+        'wind_speed': round(data['current']['wind_kph']/3.6, 1),  # TODO Реализовать вычисление скорости ветра из данных полученных от API
+        'wind_gust': round(data['current']['gust_kph']/3.6, 1),  # TODO Реализовать вычисление скорости порывов ветка из данных полученных от API
         'wind_dir': DIRECTION_TRANSFORM.get(data['current']['wind_dir'].lower()),  # Направление ветра
     }
     return result

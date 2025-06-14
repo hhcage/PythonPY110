@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from random import random
 from django.http import HttpResponse
-from app_datetime.views import datetime_view
+from app_datetime.views import datetime_view, dynamic_datetime_view
 
 
 def random_view(request):
@@ -45,34 +45,6 @@ def dynamic_random_view(request):
         return HttpResponse(script)
 
 
-def dynamic_datetime_view(request):
-    if request.method == "GET":
-        data = """
-        <script>
-            function updateTime() {
-                fetch("/datetime/")
-                    .then(response => response.text()) // Получаем HTML с сервера
-                    .then(html => {
-                        let parser = new DOMParser();
-                        let doc = parser.parseFromString(html, "text/html");
-                        let time = doc.body.innerText; // Извлекаем текст (дату и время)
-                        document.getElementById("time").innerText = time;
-                    })
-                    .catch(error => console.error("Ошибка загрузки:", error));
-            }
-    
-            setInterval(updateTime, 1000); // Обновление каждую секунду
-            window.onload = updateTime; // Загружаем первое значение при открытии страницы
-        </script>
-        <body>
-            <h1>Текущее время:</h1>
-            <p id="time">Загрузка...</p>
-        </body>
-        
-        """
-        return HttpResponse(data)
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('random/', random_view),
@@ -81,4 +53,5 @@ urlpatterns = [
     path('dynamic_datetime/', dynamic_datetime_view),
     path('weather/', include('app_weather.urls')),
     path('', include('app_store.urls')),
+    path('login/', include('app_login.urls')),
 ]
